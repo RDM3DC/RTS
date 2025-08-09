@@ -1,8 +1,3 @@
-Got it — here’s the full updated README with falsifier 3, ω(P) tuning, and λ_cap changes baked in.
-You can paste this straight into GitHub.
-
-
----
 
 ARP Experiments — Quickstart README
 
