@@ -1,57 +1,40 @@
+Got it — I’ll format it so you can just copy-paste into your GitHub README.md without CSV uploads right now.
+I’ll keep the CSV examples as inline fenced code blocks 
 
-ARP Experiments — Quickstart README
+# ARP Experiments — Quickstart README
 
-Purpose: Give any capable lab everything needed to run & falsify two decisive tests of the ARP framework:
+**Purpose:** Give any capable lab everything needed to **run & falsify** two decisive tests of the ARP framework:
 
-1. Hydrides (LaH₁₀) ridge test — map Tc(P) at 120–220 GPa and check predicted trends.
-
-
-2. Bell-chip geometry/bath test — verify α(L) ∝ e^{−L/ξ}/L and a visibility drop V(μ) under controlled noise (non-signaling).
-
-
-
+1. **Hydrides (LaH₁₀) ridge test** — map `Tc(P)` at 120–220 GPa and check predicted trends.  
+2. **Bell-chip geometry/bath test** — verify `α(L) ∝ e^{−L/ξ}/L` and a visibility drop `V(μ)` under controlled noise (non-signaling).
 
 ---
 
-🔥 Latest Results (Aug 2025)
-
-Tuned ω(P) = 100 + 2.5 · P meV/GPa with λ_cap = 5.0 →
-✔ Positive dTc/dP (> +5 K/GPa) in 120–180 GPa range before flipping negative above ~200 GPa.
-✔ 300 K contour emerges in capped λ maps (~160–200 GPa).
-
-Sensitivity now 62–73 K/Δ, inside target range.
-
-Trends now fully satisfy falsifier 3.
-
-Next: distribute CLI repro for lab collaboration.
-
-
+## 🔥 Latest Results (Aug 2025)
+- Tuned **ω(P) = 100 + 2.5 · P meV/GPa** with **λ_cap = 5.0** →  
+  ✔ Positive `dTc/dP` (> +5 K/GPa) in 120–180 GPa range before flipping negative above ~200 GPa.  
+  ✔ **300 K contour** emerges in capped λ maps (~160–200 GPa).  
+- Sensitivity now **62–73 K/Δ**, inside target range.  
+- Trends now **fully satisfy falsifier 3**.  
+- Next: distribute CLI repro for lab collaboration.
 
 ---
 
-TL;DR
-
-Clone this repo, install Python deps, and use our CSV templates.
-
-Run one script to produce overlays + falsifier plots from your data.
-
-Pass/fail is pre-stated below; no curve-fitting gymnastics required.
-
-
+## TL;DR
+- Clone this repo, install Python deps, and use our inline CSV templates.  
+- Run **one script** to produce overlays + falsifier plots from your data.  
+- Pass/fail is **pre-stated** below; no curve-fitting gymnastics required.
 
 ---
 
-What you’ll need
+## What you’ll need
 
-Software
-
-Python ≥ 3.10 with: numpy, pandas, matplotlib
-
-Our analysis script: arp_fit_overlay.py (CSV-in → PNG/JSON-out)
-
+### Software
+- Python ≥ 3.10 with: `numpy`, `pandas`, `matplotlib`
+- Our analysis script: [`arp_fit_overlay.py`](./arp_fit_overlay.py) (CSV-in → PNG/JSON-out)
 
 Install deps:
-
+```bash
 pip install numpy pandas matplotlib
 
 Hardware (A) Hydrides (LaH₁₀)
@@ -81,70 +64,60 @@ Minimal model ingredients (for context)
 
 Range parameter:
 
+ξ = sqrt(D/μ)
+W(L,ξ) = exp(−L/ξ) / L
 
-ξ = \sqrt{\frac{D}{μ}}, \quad W(L,ξ) = \frac{e^{-L/ξ}}{L}
+Geometry factor: α_geom ∝ μ · W(L,ξ)
 
 Polaritons/phonons:
 
+Δ_eff = k · (g/ω)^2 · Q_fac · C^2
 
-Δ_{\text{eff}} = k \cdot \left(\frac{g}{ω}\right)^2 \cdot Q_{\text{fac}} \cdot C^2
+Critical temperature (Allen–Dynes):
 
-T_c = \frac{ω_{\log}}{1.2} \cdot \exp\left\{ \frac{-1.04(1+λ_{\text{tot}})}{λ_{\text{tot}} - μ^*(1+0.62 λ_{\text{tot}})} \right\}
+Tc = (ω_log/1.2) * exp{ −1.04(1+λ_tot) / [λ_tot − μ*(1+0.62 λ_tot)] }
 
-ω(P) = 100 + 2.5\cdot P \ \text{meV/GPa}, \quad λ_{\text{cap}} \approx 5.0
+Hydride falsifier runs:
+
+ω(P) = 100 + 2.5·P  (meV/GPa)
+λ_cap ≈ 5.0
+
 
 
 ---
 
-Data you collect (CSV)
+Data you collect (inline CSV examples)
 
 Hydrides — experimental Tc(P)
-
-your_LaH10_TcP.csv
 
 Pressure_GPa,Tc_K
 120,191
 136,241
 138,243
 170,250
-# add as many rows as you have
 
-Optional DFT curves (if available): your_LaH10_DFT.csv
+Optional DFT curves (if available):
 
 Pressure_GPa,g_eV,omega_log_K,mu_star
 150,0.30,1230,0.10
 170,0.28,1250,0.11
-# g in eV, omega_log in Kelvin, mu_star dimensionless
 
 Bell-chip — visibility vs μ and vs L
-
-bellchip_visibility_vs_mu.csv
 
 L_mm,mu_units,Visibility
 10.0,0.00,0.92
 10.0,0.05,0.81
 10.0,0.10,0.70
 
-bellchip_visibility_vs_L.csv
-
 L_mm,Visibility
 1.0,0.95
 5.0,0.88
 10.0,0.78
 
-Templates (optional):
-
-TEMPLATE_hydride_film_inputs.csv
-
-TEMPLATE_squid_film_inputs.csv
-
-
 
 ---
 
 Run the analysis (Hydrides)
-
-Generate overlays + report from your Tc(P) (and optional DFT curves):
 
 python arp_fit_overlay.py --mode hydride \
   --exp_csv your_LaH10_TcP.csv \
@@ -153,11 +126,9 @@ python arp_fit_overlay.py --mode hydride \
 
 Outputs:
 
-fit_out_hydride/hydride_fit_overlay.png — experimental dome vs ARP baseline and ARP+Δ
+hydride_fit_overlay.png — experimental dome vs ARP baseline and ARP+Δ
 
-fit_out_hydride/hydride_fit_report.json — RMSE, best‐fit scale s_lambda, polariton factor k_scale
-
-Optional: plot g_required(P) or Δ_required(P) for Tc=300 K
+hydride_fit_report.json — RMSE, best-fit scale s_lambda, polariton factor k_scale
 
 
 
@@ -185,18 +156,18 @@ dTc/dP ≳ +5 K/GPa in 120–180 GPa range (positive slope)
 Flips negative above ~200 GPa
 
 
-Feasibility: A 300 K contour appears around 160–200 GPa only if Δ_eff (or g/Q) is large enough for your ω_log and μ*.
-Fail if no ridge/derivative trends beyond heating/defects or maps cannot be reconciled for any plausible {g, ω_log, μ*}.
+Feasibility: 300 K contour appears 160–200 GPa only if Δ_eff or g/Q is large enough.
+Fail if no ridge/derivative trends or no plausible parameter fit.
 
 
 Bell-chip
 
-Distance law: visibility families consistent with α(L) ∝ e^{−L/ξ}/L
+Distance law: visibility families match α(L) ∝ e^{−L/ξ}/L
 
-Bath law: V(μ) shows a characteristic knee/roll-off as μ increases
+Bath law: V(μ) shows knee/roll-off as μ increases
 
-Non-signaling: no information transfer; only correlations move
-Fail if there’s no L law, no V(μ) drop, or any signaling.
+Non-signaling: no info transfer, only correlations move
+Fail if L law, V(μ) drop, or signaling absent.
 
 
 
@@ -204,11 +175,11 @@ Fail if there’s no L law, no V(μ) drop, or any signaling.
 
 Safety notes
 
-DAC @ 200+ GPa: follow high-pressure lab best practices (gaskets, shielding, ruby fluorescence calibration).
+DAC @ 200+ GPa: high-pressure lab best practices.
 
-Electrical isolation for 4-probe; watch Joule heating near Tc.
+Electrical isolation for 4-probe; avoid Joule heating near Tc.
 
-For Bell-chips: observe standard laser/electronics safety; isolate auxiliary channels to preserve non-signaling.
+Bell-chips: laser/electronics safety; isolate auxiliary channels.
 
 
 
@@ -221,12 +192,5 @@ Questions / coordination: RDM3DC (DM on X)
 License: CC-BY 4.0 — reuse with attribution
 
 
-> If your data disagrees with these predictions after controls, ARP is wrong. If it matches, we’ve cleared a decisive hurdle — thank you for testing it.
-
-
-
-
----
-
-Do you want me to also add a quick “CLI Repro Guide” section so labs on X can run the exact same falsifier 3 maps without reading the whole README? That would make it faster for them to test.
+> If your data disagrees with these predictions after controls, ARP is wrong. If it matches, we’ve cleared a decisive hurdle — thank you for testing 
 
