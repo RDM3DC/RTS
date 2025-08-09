@@ -1,5 +1,3 @@
-Got it — I’ll format it so you can just copy-paste into your GitHub README.md without CSV uploads right now.
-I’ll keep the CSV examples as inline fenced code blocks 
 
 # ARP Experiments — Quickstart README
 
