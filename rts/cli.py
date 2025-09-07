@@ -1,5 +1,6 @@
 """
-Thin CLI wrapper that calls the existing scripts so labs can run:
+Command-line interface for RTS: Rapid Test Suite (hydrides & Bell-chip overlays).
+Wraps the existing scripts so labs can run one-liners like:
 
   rts hydride --exp-csv sample_exp_H3S.csv --dft-csv sample_dft_hydride_curves.csv --out outdir/
 
@@ -8,117 +9,98 @@ and
   rts squid --exp-csv TEMPLATE_squid_film_inputs.csv --out outdir/
 """
 from __future__ import annotations
-import subprocess, sys
+import argparse, subprocess, sys
 from pathlib import Path
-import typer
-from rich import print
-from rich.panel import Panel
 from .config import load_config
 from .reporting import build_markdown
 
-app = typer.Typer(help="RTS: Rapid Test Suite (hydrides & Bell-chip overlays)")
-
 ROOT = Path(__file__).resolve().parents[1]
+
 
 def _py() -> str:
     return sys.executable
 
-@app.command()
-def hydride(
-    exp_csv: Path = typer.Option(..., "--exp-csv", help="Experimental hydride CSV (e.g., sample_exp_H3S.csv)"),
-    dft_csv: Path = typer.Option(..., "--dft-csv", help="DFT curves CSV (e.g., sample_dft_hydride_curves.csv)"),
-    out: Path = typer.Option(Path("out_hydride"), "--out", help="Output directory"),
-    extra: str = typer.Option("", "--extra", help="Extra args passed to arp_fit_overlay.py"),
-):
-    """Run the hydride ARP overlay."""
+
+def run_hydride(exp_csv: Path, dft_csv: Path, out: Path, extra: str = "") -> None:
     out.mkdir(parents=True, exist_ok=True)
     script = ROOT / "arp_fit_overlay.py"
-    if not script.exists():
-        raise typer.BadParameter(f"Cannot find {script}")
-    cmd = [
-        _py(), str(script),
-        "--exp", str(exp_csv),
-        "--dft", str(dft_csv),
-        "--out", str(out),
-    ]
+    cmd = [_py(), str(script), "--mode", "hydride", "--exp_csv", str(exp_csv), "--dft_csv", str(dft_csv), "--outdir", str(out)]
     if extra:
         cmd += extra.split()
-    print(Panel.fit("Running hydride overlay…", title="RTS"))
-    res = subprocess.run(cmd, check=False, capture_output=True, text=True)
-    print(res.stdout)
-    if res.returncode != 0:
-        print(Panel.fit(res.stderr, title="Error", style="red"))
-        raise typer.Exit(res.returncode)
-    print(Panel.fit(f"Done. Outputs in: {out}", style="green"))
+    subprocess.run(cmd, check=True)
 
-@app.command()
-def squid(
-    exp_csv: Path = typer.Option(..., "--exp-csv", help="SQUID/film CSV (e.g., TEMPLATE_squid_film_inputs.csv)"),
-    out: Path = typer.Option(Path("out_squid"), "--out", help="Output directory"),
-    extra: str = typer.Option("", "--extra", help="Extra args passed to arp_fit_new.py"),
-):
-    """Run the SQUID/film ARP overlay (Bell-chip analogue)."""
+
+def run_squid(exp_csv: Path, out: Path, extra: str = "") -> None:
     out.mkdir(parents=True, exist_ok=True)
     script = ROOT / "arp_fit_new.py"
-    if not script.exists():
-        raise typer.BadParameter(f"Cannot find {script}")
-    cmd = [
-        _py(), str(script),
-        "--exp", str(exp_csv),
-        "--out", str(out),
-    ]
+    cmd = [_py(), str(script), "--exp", str(exp_csv), "--out", str(out)]
     if extra:
         cmd += extra.split()
-    print(Panel.fit("Running SQUID/film overlay…", title="RTS"))
-    res = subprocess.run(cmd, check=False, capture_output=True, text=True)
-    print(res.stdout)
-    if res.returncode != 0:
-        print(Panel.fit(res.stderr, title="Error", style="red"))
-        raise typer.Exit(res.returncode)
-    print(Panel.fit(f"Done. Outputs in: {out}", style="green"))
+    subprocess.run(cmd, check=True)
 
-@app.command("from-config")
-def from_config(
-    cfg: Path = typer.Option(Path("rts.toml"), "--cfg", help="Path to rts.toml"),
-    run: str = typer.Option("all", "--run", help="Which block to run: hydride|squid|all"),
-):
-    """Run tasks as specified in rts.toml."""
-    conf = load_config(cfg)
-    if run in ("hydride", "all") and conf.hydride:
-        hyd = conf.hydride
-        hyd.out.mkdir(parents=True, exist_ok=True)
-        cmd = [
-            _py(), str(ROOT / "arp_fit_overlay.py"),
-            "--exp", str(hyd.exp_csv),
-            "--dft", str(hyd.dft_csv),
-            "--out", str(hyd.out),
-        ] + (hyd.extra.split() if hyd.extra else [])
-        print(Panel.fit(f"Hydride from {cfg} …", title="RTS"))
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        print(res.stdout or "")
-        if res.returncode != 0:
-            print(Panel.fit(res.stderr, title="Hydride error", style="red"))
-    if run in ("squid", "all") and conf.squid:
-        sq = conf.squid
-        sq.out.mkdir(parents=True, exist_ok=True)
-        cmd = [
-            _py(), str(ROOT / "arp_fit_new.py"),
-            "--exp", str(sq.exp_csv),
-            "--out", str(sq.out),
-        ] + (sq.extra.split() if sq.extra else [])
-        print(Panel.fit(f"SQUID/film from {cfg} …", title="RTS"))
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        print(res.stdout or "")
-        if res.returncode != 0:
-            print(Panel.fit(res.stderr, title="SQUID error", style="red"))
 
-@app.command()
-def report(
-    in_: Path = typer.Option(..., "--in", help="Directory with PNG/JSON outputs"),
-    out: Path = typer.Option(Path("report.md"), "--out", help="Markdown path to write"),
-    title: str = typer.Option("RTS Report", "--title"),
-):
-    """Bundle outputs (PNG/JSON) into a Markdown report in the same folder."""
-    md = build_markdown(in_, title=title)
-    out.write_text(md, encoding="utf-8")
-    print(Panel.fit(f"Wrote report: {out}", style="green"))
+def cmd_hydride(args: argparse.Namespace) -> None:
+    run_hydride(args.exp_csv, args.dft_csv, args.out, args.extra)
+
+
+def cmd_squid(args: argparse.Namespace) -> None:
+    run_squid(args.exp_csv, args.out, args.extra)
+
+
+def cmd_from_config(args: argparse.Namespace) -> None:
+    conf = load_config(args.cfg)
+    if args.run in ("hydride", "all") and conf.hydride:
+        h = conf.hydride
+        run_hydride(h.exp_csv, h.dft_csv, h.out, h.extra)
+    if args.run in ("squid", "all") and conf.squid:
+        s = conf.squid
+        run_squid(s.exp_csv, s.out, s.extra)
+
+
+def cmd_report(args: argparse.Namespace) -> None:
+    md = build_markdown(args.in_dir, title=args.title)
+    args.out.write_text(md, encoding="utf-8")
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="rts", description="RTS: Rapid Test Suite")
+    sub = parser.add_subparsers(dest="command")
+
+    p = sub.add_parser("hydride", help="Run the hydride ARP overlay")
+    p.add_argument("--exp-csv", required=True, type=Path)
+    p.add_argument("--dft-csv", required=True, type=Path)
+    p.add_argument("--out", type=Path, default=Path("out_hydride"))
+    p.add_argument("--extra", default="")
+    p.set_defaults(func=cmd_hydride)
+
+    p = sub.add_parser("squid", help="Run the SQUID/film ARP overlay")
+    p.add_argument("--exp-csv", required=True, type=Path)
+    p.add_argument("--out", type=Path, default=Path("out_squid"))
+    p.add_argument("--extra", default="")
+    p.set_defaults(func=cmd_squid)
+
+    p = sub.add_parser("from-config", help="Run tasks as specified in rts.toml")
+    p.add_argument("--cfg", type=Path, default=Path("rts.toml"))
+    p.add_argument("--run", choices=["hydride", "squid", "all"], default="all")
+    p.set_defaults(func=cmd_from_config)
+
+    p = sub.add_parser("report", help="Bundle PNG/JSON outputs into a Markdown report")
+    p.add_argument("--in", dest="in_dir", required=True, type=Path)
+    p.add_argument("--out", type=Path, default=Path("report.md"))
+    p.add_argument("--title", default="RTS Report")
+    p.set_defaults(func=cmd_report)
+
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if hasattr(args, "func"):
+        args.func(args)
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()
