@@ -1,0 +1,1 @@
+{'mean_eta': 0.04004352950507275, 'delta_f_Hz': 240261177.03043365, 'mean_beta': 0.12580045811694265, 'f0_Hz': 6000000000.0, 'tau_s': 8.333333333333333e-11, 'notes': 'Δf/f0 ≈ mean(η); sidebands largely unchanged; redshift adds DC frequency offset proportional to <η>.'}
