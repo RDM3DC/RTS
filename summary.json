@@ -1,0 +1,26 @@
+{
+  "site": {
+    "lat": 34.03
+  },
+  "size": {
+    "pv_kw": 500.0,
+    "bess_kwh": 2000.0,
+    "bess_kw": 500.0
+  },
+  "annual": {
+    "pv_kwh": 1060576.135091505,
+    "load_noctrl_kwh": 740905.4049421564,
+    "load_arp_kwh": 551789.9563375508,
+    "arp_savings_kwh": 189115.44860460563,
+    "net_balance_noctrl_kwh": 1168332.380374261,
+    "net_balance_arp_kwh": 1239094.2158494792
+  },
+  "controls": {
+    "hvac_shift_frac": 0.35,
+    "hvac_eff_gain": 0.12,
+    "pump_shift_frac": 0.65,
+    "lab_shift_frac": 0.2,
+    "ev_shift_frac": 0.7
+  },
+  "notes": "Toy model; ARP shifts HVAC/pumps/EV into PV windows and improves COP."
+}
