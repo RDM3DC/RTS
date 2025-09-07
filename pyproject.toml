@@ -26,3 +26,7 @@ Homepage = "https://github.com/RDM3DC/RTS"
 
 [project.scripts]
 rts = "rts.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["rts"]
+exclude = ["bench_out", "examples"]
