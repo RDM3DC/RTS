@@ -45,8 +45,11 @@ Badges: CI ✔︎ · MIT · CITATION.cff
 ```bash
 # Edit rts.toml with your file paths/params, then:
 rts from-config --cfg rts.toml --run all
+```
 
 Generate a report
+
+```bash
 # Bundle PNG/JSON in an output folder into a single Markdown file
 rts report --in out_hydride --out out_hydride/report.md
 ```
