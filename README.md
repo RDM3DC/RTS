@@ -1,6 +1,8 @@
 
 # ARP Experiments — Quickstart README
 
+[![CI](https://github.com/RDM3DC/RTS/actions/workflows/ci.yml/badge.svg)](https://github.com/RDM3DC/RTS/actions/workflows/ci.yml) [![PyPI version](https://img.shields.io/pypi/v/rts-arp.svg)](https://pypi.org/project/rts-arp/) [![Python 3](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) [![Open Issues](https://img.shields.io/github/issues/RDM3DC/RTS.svg)](https://github.com/RDM3DC/RTS/issues) [![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ff69b4.svg)](https://github.com/sponsors/RDM3DC)
+
 **Purpose:** Give any capable lab everything needed to **run & falsify** two decisive tests of the ARP framework:
 
 1. **Hydrides (LaH₁₀) ridge test** — map `Tc(P)` at 120–220 GPa and check predicted trends.  
