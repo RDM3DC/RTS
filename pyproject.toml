@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rts-arp"
+version = "0.1.0"
+description = "RTS: Rapid Test Suite for hydrides and Bell-chip analogue (ARP overlays)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+  { name = "RDM3DC", email = "rdm3dc@example.com" }
+]
+keywords = ["superconductivity", "hydrides", "ARP", "materials", "Bell", "analogue"]
+dependencies = [
+  "numpy>=1.22",
+  "pandas>=2.0",
+  "matplotlib>=3.7",
+  "scipy>=1.10",
+  "tomli; python_version<'3.11'",
+]
+
+[project.urls]
+Homepage = "https://github.com/RDM3DC/RTS"
+
+[project.scripts]
+rts = "rts.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["rts"]
+exclude = ["bench_out", "examples"]

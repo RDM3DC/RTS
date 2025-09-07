@@ -1,0 +1,12 @@
+# Example config for RTS runs
+
+[hydride]
+exp_csv = "sample_exp_H3S.csv"
+dft_csv = "sample_dft_hydride_curves.csv"
+out     = "out_hydride"
+# extra   = "--omega 1200 --mu_star 0.12"   # forwarded to arp_fit_overlay.py
+
+[squid]
+exp_csv = "TEMPLATE_squid_film_inputs.csv"
+out     = "out_squid"
+# extra   = "--alpha 0.3"                   # forwarded to arp_fit_new.py
