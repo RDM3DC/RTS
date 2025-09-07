@@ -2,6 +2,14 @@ cff-version: 1.2.0
 title: "RTS: Rapid Test Suite for hydrides & Bell-chip analogue (ARP overlays)"
 message: "If you use this software, please cite it."
 type: software
+keywords:
+  - superconductivity
+  - hydrides
+  - ARP
+  - materials
+  - Bell
+  - analogue
+  - donation
 authors:
   - name: RDM3DC
 repository-code: "https://github.com/RDM3DC/RTS"
