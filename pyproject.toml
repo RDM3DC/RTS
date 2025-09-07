@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
-  { name = "RDM3DC", email = "n/a" }
+  { name = "RDM3DC", email = "rdm3dc@example.com" }
 ]
 keywords = ["superconductivity", "hydrides", "ARP", "materials", "Bell", "analogue"]
 dependencies = [
