@@ -12,7 +12,7 @@ license = { text = "MIT" }
 authors = [
   { name = "RDM3DC", email = "rdm3dc@example.com" }
 ]
-keywords = ["superconductivity", "hydrides", "ARP", "materials", "Bell", "analogue", "donation"]
+keywords = ["superconductivity", "hydrides", "ARP", "materials", "Bell", "analogue", "donation", "sponsor"]
 dependencies = [
   "numpy>=1.22",
   "pandas>=2.0",
