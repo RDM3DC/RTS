@@ -23,6 +23,42 @@
 - Run **one script** to produce overlays + falsifier plots from your data.  
 - Pass/fail is **pre-stated** below; no curve-fitting gymnastics required.
 
+
+---
+
+### Quickstart (CLI)
+
+```bash
+pip install -e .
+# Hydrides overlay
+rts hydride --exp-csv sample_exp_H3S.csv --dft-csv sample_dft_hydride_curves.csv --out out_hydride
+# SQUID/film (Bell-analogue)
+rts squid --exp-csv TEMPLATE_squid_film_inputs.csv --out out_squid
+```
+
+What this does: wraps the existing `arp_fit_overlay.py` and `arp_fit_new.py` so labs can run a one-liner and get PNG and JSON reports. See [SAFETY.md](SAFETY.md) before any lab work.
+
+Badges: CI ✔︎ · MIT · CITATION.cff
+
+### Run from config
+
+```bash
+# Edit rts.toml with your file paths/params, then:
+rts from-config --cfg rts.toml --run all
+
+Generate a report
+# Bundle PNG/JSON in an output folder into a single Markdown file
+rts report --in out_hydride --out out_hydride/report.md
+```
+
+### Release
+
+Push a tag like `v0.1.0-labs` to trigger the release workflow. It builds wheels/sdist and attaches:
+
+- `dist/*` (packages)
+- `rel_out/**/*` (sample PNG/JSON + auto reports)
+
+
 ---
 
 ## What you’ll need

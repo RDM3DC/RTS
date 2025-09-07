@@ -1,0 +1,40 @@
+name: rts-release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install & build
+      run: |
+        python -m pip install --upgrade pip build
+        pip install -e .
+        python -m build
+
+    - name: Run samples (produce artifacts)
+      run: |
+        rts hydride --exp-csv sample_exp_H3S.csv --dft-csv sample_dft_hydride_curves.csv --out rel_out/hydride
+        rts squid   --exp-csv TEMPLATE_squid_film_inputs.csv --out rel_out/squid
+        rts report  --in rel_out/hydride --out rel_out/hydride_report.md
+        rts report  --in rel_out/squid   --out rel_out/squid_report.md
+        ls -R rel_out || true
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          dist/**
+          rel_out/**/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
