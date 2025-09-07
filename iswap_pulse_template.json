@@ -1,0 +1,14 @@
+{
+  "mode": "iswap",
+  "omega_q_Hz": 5500000000.0,
+  "omega_r_Hz": 6000000000.0,
+  "pump_freq_Hz": 500000000.0,
+  "beta": 0.15,
+  "g0_Hz": 50000000.0,
+  "duration_ns": 66.8545188068541,
+  "envelope": {
+    "shape": "cosine-square",
+    "sigma_ns": 10.0
+  },
+  "notes": "Set amplitude to achieve measured \u03b2 via sideband dBc; adjust freq to max swap rate."
+}
